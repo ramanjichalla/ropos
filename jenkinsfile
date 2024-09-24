@@ -14,7 +14,6 @@ pipeline {
         stage ('send to server') {
             steps {
                 sshagent(['ram']) {
-                    // Adjust the path to the jar file and the remote server details
                     sh 'scp target/*.jar user@remote-server:/path/to/destination/'
                 }
             }
