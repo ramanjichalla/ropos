@@ -14,7 +14,7 @@ pipeline {
         stage ('send to server') {
             steps {
                 sshagent(['ram']) {
-                    sh 'scp target/*.jar user@remote-server:/path/to/destination/'
+                    sh 'scp /var/lib/jenkins/workspace/deploed/target/*.jar ec2-user@remote-serverip:/root/task'
                 }
             }
         }
