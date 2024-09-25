@@ -3,19 +3,23 @@ pipeline {
     stages {
         stage ('checkout') {
             steps {
-                git 'https://github.com/jglick/simple-maven-project-with-tests.git'
+                git 'https://github.com/jabedhasan21/java-hello-world-with-maven.git'
             }
         }
         stage ('build') {
             steps {
-                sh 'mvn clean package'
+                sh ' mvn clean package '
             }
         }
-        stage ('send to server') {
-            steps {
-                sshagent(['ram']) {
-                    sh 'scp /var/lib/jenkins/workspace/deploed/target/*.jar ec2-user@remote-serverip:/root/task'
-                }
+        stage('connection'){
+            steps{
+                sh'ssh -i /var/lib/jenkins/.ssh/id_rsa -o UserKnownHostsFile=/var/lib/jenkins/.ssh/known_hosts root@13.233.247.215'
+            }
+        }
+           stage('components'){
+            steps{
+                sh'scp -i /var/lib/jenkins/.ssh/id_rsa /var/lib/jenkins/workspace/mandis_project/target/*.jar root@13.233.247.215:/root/test'
+                
             }
         }
     }
