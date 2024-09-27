@@ -1,0 +1,37 @@
+pipeline {
+    
+    agent any
+    
+    stages {
+        stage('checkout') {
+            steps {
+                git 'https://github.com/ramanjichalla/demo-java.git'
+            }
+        }
+        stage ('Artifact') {
+            steps {
+                sh 'mvn clean package'
+            }
+        }
+        stage ('build') {
+            steps {
+                sh 'docker build -t war-image3 .'
+                sh 'docker tag war-image3 ramanji380/war-image3:v1'
+            }
+        }
+        stage ('push into dockerhub') {
+            steps {
+                script {
+                    withDockerRegistry(credentialsId: '0e0f4094-b44a-42af-a63f-e85af0efbd8d') {
+                        sh ' docker push ramanji380/war-image3:v1'
+                    }
+                }
+            }
+        }
+        stage ('run application') {
+            steps {
+                sh 'docker run --name war-cont-1 -d -p 3023:8080 ramanji380/war-image3:v1'
+            }
+        }
+    }
+}
